@@ -528,7 +528,7 @@ def ptjpl_smap(lat,
                          'potential_transpiration':(['x', 'y'],       potential_transpiration),
                          'SMAPevapotranspiration': (['x', 'y'],       SMAPevapotranspiration),
                          'SMAPsoil_evaporation': (['x', 'y'],         SMAPsoil_evaporation),
-                         'SMAPcanopy_transpiration': (['x', 'y'],     SMAPcanopy_transpiration)
+                         'SMAPcanopy_transpiration': (['x', 'y'],     SMAPcanopy_transpiration),
                          'SMAP_QC_AM': (['x', 'y'],                   QC_AM),
                          'SMAP_QC_PM': (['x', 'y'],                   QC_PM)
 #                         'soil_heat_flux':(['x','y'],                 soil_heat_flux)#,

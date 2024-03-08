@@ -52,23 +52,23 @@ from ptjpl_lib.ptjpl_smap_lib_RH import *
 # set home directory to navigate from data folders to this folder:
 
 home_dir = os.getcwd()
-data_dir = '/data15/famiglietti2/ajpurdy/SMAP_ET_global/data/'
-data_out_dir = '/data15/famiglietti2/ajpurdy/SMAP_ET_global/results/SMAP_PTJPL_'
-carbon_out_dir = '/data15/famiglietti2/ajpurdy/SMAP_OCO2_vegetation_comp/results/'
+data_dir = './data/test_data_AJ/'
+data_out_dir = './data/test_data_AJ/results/'
+carbon_out_dir = './data/test_data_AJ/results/'
 
 # -------------------------------------------------------------
 # Get command line arguments
 # -------------------------------------------------------------
 
-IS_arg=len(sys.argv)
-if IS_arg <4 or IS_arg>5 :
-     print('ERROR - Expecting 3 inputs: \n\t1.\tResolution 3 9 or 36\n\t2.\tYear [format YYYY]\n\t3.\tStart DOY [format DOY]\n\t4.\End DOY [format DOY]')
-     raise SystemExit(22) 
-res_str=sys.argv[1]
+#IS_arg=len(sys.argv)
+#if IS_arg <4 or IS_arg>5 :
+#     print('ERROR - Expecting 3 inputs: \n\t1.\tResolution 3 9 or 36\n\t2.\tYear [format YYYY]\n\t3.\tStart DOY [format DOY]\n\t4.\End DOY [format DOY]')
+#     raise SystemExit(22) 
+res_str=9
 res = int(res_str)
-year = sys.argv[2]
-start_doy = sys.argv[3]
-end_doy   = sys.argv[4]
+year = 2016
+start_doy = 150
+end_doy   = 180
 # -------------------------------------------------------------
 # Check for resolution
 # -------------------------------------------------------------
@@ -83,13 +83,15 @@ if res!=3 and res!=9 and res!=36:
 print('\nCommand line inputs:')
 print('\tresolution set to \t '+ str(res))
 print('\tyear \t\t\t '         + str(year))
-print('\tdoy start \t\t '      + start_doy)
-print('\tdoy end \t\t '        + end_doy)
+print('\tdoy start \t\t '      + str(start_doy))
+print('\tdoy end \t\t '        + str(end_doy))
 
 # -------------------------------------------------------------
-with open('ptjpl_smap_forcing_meta_data_gp.json') as data_file:    
-    meta_data = json.load(data_file)
+#with open('ptjpl_smap_forcing_meta_data_gp.json') as data_file:    
+#    meta_data = json.load(data_file)
 
+with open('./data/test_data_AJ/config.json') as data_file:
+    meta_data = json.load(data_file)
 
 # -------------------------------------------------------------    
 # Data for original runs:
@@ -145,6 +147,7 @@ def read_CH():
 def load_Topt_fAPARmax():
     # load optimum temperature (C)
     Topt_file = data_dir+topt_path+ meta_data['T_OPT']['file_start'] + meta_data['T_OPT'][str(res)] + meta_data['T_OPT']['file_end']
+    
     fh = Dataset(Topt_file, mode='r')
     optimum_temperature = fh.variables[meta_data['T_OPT']['varname']][:]
     fh.close()
@@ -175,11 +178,15 @@ def read_SMAP_data(smap_time,resolution): # change to L4_
 def read_SMAP_data_NEW(smap_time,resolution): # change to L4_
     smap_key='SOIL_MOISTURE_'+str(resolution)+'KM'
     smap_file = data_dir+smap_path + meta_data[smap_key]['file_start'] + smap_time + meta_data[smap_key]['file_end']
+    print(smap_file)
     fh = Dataset(smap_file, mode='r')
     #smap_sm = fh.variables[meta_data[smap_key]['varname']][:]
     #smap_sm[smap_sm<-0.]=np.nan
-    smap_am = fh.variables['soil_moisture_AM'][:]
-    smap_qc = fh.variables['soil_moistureQC'][:]
+    #smap_am = fh.variables['soil_moisture_AM'][:]
+    smap_am = fh.variables['soil_moisture'][:]
+    #smap_qc = fh.variables['soil_moistureQC'][:]
+    smap_qc = fh.variables['qc_flag_am'][:]
+    
     if resolution == 3:
         smap_qc_am = fh.variables[meta_data[smap_key]['qcname']][:]
         smap_qc_pm = smap_qc_am
@@ -253,15 +260,17 @@ print('\nStatic variables loaded:')
 #out_path_start = '/data15/famiglietti2/ajpurdy/SMAP_ET_global/data/'
 
 def EASE2_LON_LAT(res):
-    directory_start = '/data15/famiglietti2/ajpurdy/SMAP_ET_global/data/LAT_LON/EASE2/'
-    folder_path = 'gridloc_EASE2_M'+str(res).zfill(2)+'km'
-    fnameLON = glob.glob(directory_start+folder_path+'/*lons*')[0]
-    fnameLAT = glob.glob(directory_start+folder_path+'/*lats*')[0]
+    directory_start = './data/test_data_AJ/lat_lon/'
+    folder_path = 'gridloc.EASE2_M'+str(res).zfill(2)+'km'
+    path = directory_start+folder_path
+    fnameLON = glob.glob(path + '/*lons*')[0]
+    fnameLAT = glob.glob(path + '/*lats*')[0]
     scale = int(res/3.)
     ny3 = int(4872/scale)
     nx3 = int(11568/scale)
     LAT = np.fromfile(fnameLAT, dtype=np.double).reshape((ny3,nx3))
     LON = np.fromfile(fnameLON, dtype=np.double).reshape((ny3,nx3))
+    
     return LON[0,:], LAT[:,0]
 
 #if res ==3:
@@ -306,7 +315,7 @@ canopy_height[~mask] =np.nan
 print('\tcanopy_height')
 
 # read RH monthly_data
-RH_path = '/data15/famiglietti2/ajpurdy/SMAP_ET_global/data/EASE_'+str(res)+'/RH/x_MONTHLY_DATA_x'
+RH_path = './data/test_data_AJ/merra_rh/monthly/'
 
 def name_rh_month_files(year_string,month_string):
     return 'RH_'+year_string+month_string+'_mean.nc'
@@ -360,9 +369,9 @@ def read_smooth_rh_onemonth(RH_path,year,doy):
     month_name = name_rh_month_files(y,m)    
     try: 
         with Dataset(RH_path + month_name, mode='r') as fh:
-            relative_humidity_data = fh.variables[meta_data['relative_humidity']['varname']][:]
+            relative_humidity_data = fh.variables[meta_data['RH']['varname']][:]
     except Exception as e:
-        print('netcdf file not found in path:\n\t\t' + RH_path)    
+        print('netcdf file not found in path:\n\t\t' + RH_path + month_name)    
         print(e)
     return relative_humidity_data
 
@@ -371,9 +380,9 @@ def read_smooth_rh(RH_path,year,doy):
     fn1, w1, fn2, w2 = rh_month_weights(year,doy)
     try:
         with Dataset(RH_path + fn1, mode='r') as fh1:
-            relative_humidity_data_1 = fh1.variables[meta_data['relative_humidity']['varname']][:] * w1
+            relative_humidity_data_1 = fh1.variables[meta_data['RH']['varname']][:] * w1
         with Dataset(RH_path + fn2, mode='r') as fh2:
-            relative_humidity_data_2 = fh2.variables[meta_data['relative_humidity']['varname']][:] * w2
+            relative_humidity_data_2 = fh2.variables[meta_data['RH']['varname']][:] * w2
     
         relative_humidity_data = (relative_humidity_data_1 + relative_humidity_data_2)
     except Exception as e:
@@ -384,7 +393,7 @@ def read_smooth_rh(RH_path,year,doy):
 
 
 # -------------------------------------------------------------
-print('\nstarting model run: start='+year+start_doy.zfill(3)+' end='+year+end_doy.zfill(3))
+print('\nstarting model run: start='+str(year)+str(start_doy).zfill(3)+' end='+str(year)+str(end_doy).zfill(3))
 missing_data=[]
 for doy in np.arange(int(start_doy),int(end_doy)): # 91 is the start date 4/1/2015
     ndvi_time, merra_time, smap_time = file_name_times(str(year),doy)
@@ -428,14 +437,14 @@ for doy in np.arange(int(start_doy),int(end_doy)): # 91 is the start date 4/1/20
                                verbose=True,
                                )
         #        NEED TO GO IN AND CHANGE PTJPL_LIB.SMAPLIB BACK TO ORIGINAL OUTPUT 
-        results_i.to_netcdf(data_out_dir+str(res)+'km_am/'+'PTJPL_SMAP_ET_'+smap_time+'_'+str(res)+'km_AM.nc');
+        results_i.to_netcdf(data_out_dir +'PTJPL_SMAP_ET_'+smap_time+'_'+str(res)+'km_AM.nc');
         # results_i.to_netcdf(data_out_dir+str(res)+'km_qc/'+'PTJPL_SMAP_ET_'+smap_time+'_'+str(res)+'km.nc');
         # Below is the original 
         #results_i.to_netcdf(data_out_dir+str(res)+'km/'+'PTJPL_SMAP_ET_'+smap_time+'_'+str(res)+'km.nc');
         #results_i.to_netcdf(carbon_out_dir+'PTJPL_TRANS_'+smap_time+'.nc');
         print('\tFILE CREATED: PTJPL_SMAP_ET_'+smap_time+'_'+str(res)+'km.nc')
     except:
-        print('\t**************************file missing for ' + year + '-' + str(doy).zfill(3)+'**************************')
+        print('\t**************************file missing for ' + str(year) + '-' + str(doy).zfill(3)+'**************************')
         missing_data.append(smap_time)
         continue
-print('ALL RESULTS SAVED TO '+data_out_dir+str(res)+'km/n')
+print('ALL RESULTS SAVED TO '+data_out_dir )
