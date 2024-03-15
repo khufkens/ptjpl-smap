@@ -525,12 +525,12 @@ def ptjpl_smap(lat,
                          'canopy_transpiration': (['x', 'y'],         canopy_transpiration),
                          'interception_evaporation':  (['x', 'y'],    interception_evaporation),
                          'potential_evapotranspiration': (['x', 'y'], potential_evapotranspiration),
-                         'potential_transpiration':(['x', 'y'],       potential_transpiration),
-                         'SMAPevapotranspiration': (['x', 'y'],       SMAPevapotranspiration),
-                         'SMAPsoil_evaporation': (['x', 'y'],         SMAPsoil_evaporation),
-                         'SMAPcanopy_transpiration': (['x', 'y'],     SMAPcanopy_transpiration),
-                         'SMAP_QC_AM': (['x', 'y'],                   QC_AM),
-                         'SMAP_QC_PM': (['x', 'y'],                   QC_PM)
+                         'potential_transpiration':(['x', 'y'],       potential_transpiration)
+                         #'SMAPevapotranspiration': (['x', 'y'],       SMAPevapotranspiration),
+                         #'SMAPsoil_evaporation': (['x', 'y'],         SMAPsoil_evaporation),
+                         #'SMAPcanopy_transpiration': (['x', 'y'],     SMAPcanopy_transpiration),
+                         #'SMAP_QC_AM': (['x', 'y'],                   QC_AM),
+                         #'SMAP_QC_PM': (['x', 'y'],                   QC_PM)
 #                         'soil_heat_flux':(['x','y'],                 soil_heat_flux)#,
                          },
                          coords={'lon': (['x', 'y'], lon),'lat': (['x', 'y'], lat)})
