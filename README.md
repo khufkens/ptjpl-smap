@@ -28,3 +28,14 @@ required to run the latest code release (i.e. `_run_ptjpl_smap_global_gp_rhsm_.p
 An Rproj file has been added to load the repository as an R project, to allow
 for quick spatial analysis. Analysis scripts are in the `analysis` folder with
 figures stored in the `figures` folder.
+
+## monthly aggregations using NCO
+
+To run the monthly aggregations of the model runs, call the aggregation
+script.
+
+```
+python3 _aggregate_to_month_and_year_.py
+```
+
+results can then be plotted using the NCO plotting routine in `analysis`

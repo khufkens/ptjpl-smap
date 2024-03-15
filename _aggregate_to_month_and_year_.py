@@ -1,4 +1,6 @@
 # CONVERT MODEL OUTPUT TO MONTHLY AND YEARLY DATASETS
+# KH: generally does not alter the output results
+
 import sys
 import os
 import glob
@@ -12,10 +14,10 @@ os.chdir(in_dir)
 
 fileList = glob.glob('*.nc')
 
-# for fName in fileList:
-#  os.system('ncatted -a _FillValue,,o,f,NaN '+fName)
-#  os.system('ncatted -a _FillValue,,m,f,1.0e36 '+fName)
-#  print(fName + ' updated for NCO fill values')
+for fName in fileList:
+  os.system('ncatted -a _FillValue,,o,f,NaN '+fName)
+  os.system('ncatted -a _FillValue,,m,f,1.0e36 '+fName)
+  print(fName + ' updated for NCO fill values')
 
 years = [2015,2016,2017]
 month_lookup={'2015':(4,12),'2016':(1,12),'2017':(1,4)}

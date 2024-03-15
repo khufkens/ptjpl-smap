@@ -27,15 +27,21 @@ lapply(layers, function(layer){
   r <- rast(file, subds = layer) |>
     flip()
   
-  reference <- rast(
-    file.path(path, "reference/PTJPL_SMAP_ET_201606_mean.nc"),
-    subds = layer) |> flip()
-  
   # assign the EASE-2 grid extent
   terra::ext(r) <- c(-17367530.45, 17367530.45, -7314540.11, 7314540.11)
   
   # assign the coordinate system
   terra::crs(r) <-  "epsg:6933"
+  
+  reference <- rast(
+    file.path(path, "reference/PTJPL_SMAP_ET_201606_mean.nc"),
+    subds = layer) |> flip()
+  
+  # assign the EASE-2 grid extent
+  terra::ext(reference) <- c(-17367530.45, 17367530.45, -7314540.11, 7314540.11)
+  
+  # assign the coordinate system
+  terra::crs(reference) <-  "epsg:6933"
   
   diff <- reference - r
   diff[diff < -20] <- -20
