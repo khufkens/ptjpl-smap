@@ -11,7 +11,6 @@ in_dir = './data/test_data_AJ/results/'
 out_dir = './test/'
 
 os.chdir(in_dir)
-
 fileList = glob.glob('*.nc')
 
 for fName in fileList:

@@ -38,4 +38,13 @@ script.
 python3 _aggregate_to_month_and_year_.py
 ```
 
-results can then be plotted using the NCO plotting routine in `analysis`
+results can then be plotted using the NCO plotting routine in `analysis`.
+
+## Scaling issues
+
+- [x] NCO fill values (not the cause)
+- [ ] air temperature source data
+- [ ] net radiation
+- [ ] averaging methodology
+  - mean / median / ...
+- [ ] time period used as reference (file names)
