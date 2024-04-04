@@ -45,6 +45,6 @@ results can then be plotted using the NCO plotting routine in `analysis`.
 - [x] NCO fill values (not the cause)
 - [ ] air temperature source data
 - [ ] net radiation
-- [ ] averaging methodology
+- [x] averaging methodology
   - mean / median / ...
 - [ ] time period used as reference (file names)
