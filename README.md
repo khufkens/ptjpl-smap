@@ -45,6 +45,6 @@ results can then be plotted using the NCO plotting routine in `analysis`.
 - [x] NCO fill values (not the cause)
 - [ ] air temperature source data
 - [ ] net radiation
-- [ ] averaging methodology
-  - mean / median / ...
+- [x] averaging methodology (not the cause)
 - [ ] time period used as reference (file names)
+- [ ] Gfraction function - net_radiation * Gfrac(LAI, canopy_height)
