@@ -48,3 +48,6 @@ results can then be plotted using the NCO plotting routine in `analysis`.
 - [x] averaging methodology (not the cause)
 - [ ] time period used as reference (file names)
 - [ ] Gfraction function - net_radiation * Gfrac(LAI, canopy_height)
+- [x] averaging methodology
+  - mean / median / ...
+- [ ] time period used as reference (file names)
